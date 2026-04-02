@@ -14,12 +14,12 @@ body{
   font-family:'Jost',sans-serif;
 }
 
-/* CONTAINER */
+/* WRAPPER */
 .wrapper{
   display:flex;
   height:100vh;
-  width:300vw;
-  transition:transform .8s cubic-bezier(.77,0,.18,1);
+  width:100%;
+  transition:transform .9s cubic-bezier(.77,0,.18,1);
 }
 
 /* SLIDE */
@@ -31,20 +31,21 @@ body{
   overflow:hidden;
 }
 
-/* IMAGEM */
+/* IMAGEM COM PARALLAX */
 .slide img{
   width:100%;
-  height:100%;
+  height:110%;
   object-fit:cover;
-  transform:scale(1.1);
-  transition:transform 1.2s ease;
+  transform:translateY(60px) scale(1.1);
+  transition:transform 1s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
 }
 
 /* OVERLAY */
 .overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
+  background:linear-gradient(to top,rgba(0,0,0,.75),transparent);
 }
 
 /* TEXTO */
@@ -53,16 +54,19 @@ body{
   bottom:3rem;
   left:2rem;
   color:#fff;
+  z-index:2;
 }
 
 .cat{
   font-size:.7rem;
   letter-spacing:.4em;
+  opacity:.7;
 }
 
 .name{
   font-family:'Cormorant Garamond',serif;
   font-size:2.8rem;
+  line-height:1.1;
 }
 
 .price{
@@ -76,6 +80,7 @@ body{
   bottom:1rem;
   left:50%;
   transform:translateX(-50%);
+  z-index:10;
 }
 
 .cta a{
@@ -93,6 +98,7 @@ body{
   right:1rem;
   top:50%;
   transform:translateY(-50%);
+  z-index:10;
 }
 
 .dot{
@@ -101,11 +107,12 @@ body{
   background:#777;
   margin:.5rem 0;
   border-radius:50%;
+  transition:.3s;
 }
 
 .dot.active{
   background:#fff;
-  transform:scale(1.5);
+  transform:scale(1.6);
 }
 </style>
 </head>
@@ -152,6 +159,7 @@ const dots = document.getElementById('dots');
 const cta = document.getElementById('ctaBtn');
 
 let current = 0;
+let last = 0;
 
 /* RENDER */
 products.forEach((p,i)=>{
@@ -160,7 +168,7 @@ products.forEach((p,i)=>{
   slide.className='slide';
 
   slide.innerHTML = `
-    <img src="${p.img}">
+    <img src="${p.img}" loading="${i===0?'eager':'lazy'}">
     <div class="overlay"></div>
     <div class="content">
       <div class="cat">${p.cat}</div>
@@ -180,13 +188,26 @@ products.forEach((p,i)=>{
   dots.appendChild(d);
 });
 
-/* NAVEGAÇÃO */
+/* UPDATE */
 function update(){
+
+  const direction = current > last ? 1 : -1;
+
   wrap.style.transform = `translateX(-${current*100}vw)`;
 
   document.querySelectorAll('.dot').forEach((d,i)=>{
     d.classList.toggle('active',i===current);
   });
+
+  document.querySelectorAll('.slide img').forEach((img,i)=>{
+    if(i === current){
+      img.style.transform = 'translateY(0px) scale(1.1)';
+    }else{
+      img.style.transform = `translateY(${direction*80}px) scale(1.1)`;
+    }
+  });
+
+  last = current;
 }
 
 /* SCROLL */
@@ -199,15 +220,19 @@ window.addEventListener('wheel',(e)=>{
 /* TOUCH */
 let startX=0;
 window.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+
 window.addEventListener('touchend',e=>{
   let dx = e.changedTouches[0].clientX - startX;
-  if(dx<-50) current = Math.min(current+1,products.length-1);
-  if(dx>50) current = Math.max(current-1,0);
+
+  if(dx < -50) current = Math.min(current+1,products.length-1);
+  if(dx > 50) current = Math.max(current-1,0);
+
   update();
 });
 
 /* INIT */
 cta.href = `https://wa.me/${WHATS}?text=Olá! Vim pelo site 🌸`;
+update();
 </script>
 
 </body>
