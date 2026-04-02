@@ -2,164 +2,166 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Jost:wght@200;300&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Jost:wght@300&display=swap" rel="stylesheet">
 
 <style>
-html{
-  scroll-snap-type:y mandatory;
-}
-
 body{
   margin:0;
-  background:#0b0706;
+  overflow:hidden;
+  background:#0e0a08;
   font-family:'Jost',sans-serif;
-  color:#fff;
-  overflow-x:hidden;
 }
 
-/* SEÇÃO */
-.section{
-  height:100vh;
-  scroll-snap-align:start;
-  position:relative;
-  overflow:hidden;
+/* CONTAINER */
+.wrapper{
   display:flex;
-  align-items:flex-end;
-  padding:2rem;
+  height:100vh;
+  width:300vw;
+  transition:transform .8s cubic-bezier(.77,0,.18,1);
+}
+
+/* SLIDE */
+.slide{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  flex-shrink:0;
+  overflow:hidden;
 }
 
 /* IMAGEM */
-.bg{
-  position:absolute;
-  inset:0;
+.slide img{
   width:100%;
   height:100%;
   object-fit:cover;
   transform:scale(1.1);
-  will-change:transform;
+  transition:transform 1.2s ease;
 }
 
 /* OVERLAY */
 .overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
 }
 
 /* TEXTO */
 .content{
-  position:relative;
-  z-index:2;
+  position:absolute;
+  bottom:3rem;
+  left:2rem;
+  color:#fff;
 }
 
 .cat{
   font-size:.7rem;
   letter-spacing:.4em;
-  color:var(--accent);
 }
 
 .name{
   font-family:'Cormorant Garamond',serif;
-  font-size:2.2rem;
-  line-height:1.1;
+  font-size:2.8rem;
 }
 
 .price{
   margin-top:.5rem;
-  font-size:1.3rem;
-  color:var(--accent);
+  font-size:1.4rem;
 }
 
 /* CTA */
 .cta{
   position:fixed;
-  bottom:0;
-  width:100%;
-  padding:1rem;
-  background:linear-gradient(to top,#0b0706,transparent);
+  bottom:1rem;
+  left:50%;
+  transform:translateX(-50%);
 }
 
 .cta a{
-  display:block;
-  text-align:center;
-  padding:1rem;
-  background:var(--accent);
+  padding:1rem 2rem;
+  background:#fff;
   color:#000;
   text-decoration:none;
+  font-size:.8rem;
   letter-spacing:.2em;
 }
 
-/* MOBILE */
-@media(max-width:768px){
-  .name{font-size:1.8rem}
-  .price{font-size:1.1rem}
+/* DOTS */
+.dots{
+  position:fixed;
+  right:1rem;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.dot{
+  width:6px;
+  height:6px;
+  background:#777;
+  margin:.5rem 0;
+  border-radius:50%;
+}
+
+.dot.active{
+  background:#fff;
+  transform:scale(1.5);
 }
 </style>
 </head>
 
 <body>
 
-<div id="app"></div>
+<div class="wrapper" id="wrap"></div>
 
 <div class="cta">
   <a id="ctaBtn" target="_blank">Tenho interesse</a>
 </div>
 
-<audio id="tick" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+<div class="dots" id="dots"></div>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
-
 const WHATS = '5562999999999';
 
-/* PRODUTOS */
 const products = [
   {
     cat:'Vestido',
-    name:'Floral Elegance',
+    name:'Floral Vintage',
     price:'35',
-    accent:'#D4879A',
-    img:'https://images.unsplash.com/photo-1520975922324-2c1b3a4c8d2b?w=1200',
-    msg:'Tenho interesse no Vestido Floral Elegance 🌸'
+    img:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200',
+    msg:'Tenho interesse no Vestido Floral Vintage 🌸'
   },
   {
     cat:'Blusa',
     name:'Tricô Rosé',
     price:'22',
-    accent:'#C9A96E',
-    img:'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=1200',
+    img:'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=1200',
     msg:'Tenho interesse na Blusa Tricô Rosé 🌸'
   },
   {
     cat:'Calça',
-    name:'Pantalona Sage',
+    name:'Pantalona Chic',
     price:'45',
-    accent:'#8FAF8A',
-    img:'https://images.unsplash.com/photo-1521334884684-d80222895322?w=1200',
-    msg:'Tenho interesse na Pantalona Sage 🌸'
+    img:'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1200',
+    msg:'Tenho interesse na Pantalona Chic 🌸'
   }
 ];
 
-const app = document.getElementById('app');
-const ctaBtn = document.getElementById('ctaBtn');
-const audio = document.getElementById('tick');
+const wrap = document.getElementById('wrap');
+const dots = document.getElementById('dots');
+const cta = document.getElementById('ctaBtn');
 
-/* RENDER IMEDIATO (SEM BLOQUEIO) */
+let current = 0;
+
+/* RENDER */
 products.forEach((p,i)=>{
-  const section = document.createElement('div');
-  section.className='section';
-  section.style.setProperty('--accent',p.accent);
 
-  section.innerHTML = `
-    <img class="bg" src="${p.img}" loading="${i===0?'eager':'lazy'}"
-      onerror="this.style.background='#000';this.remove();">
+  const slide = document.createElement('div');
+  slide.className='slide';
+
+  slide.innerHTML = `
+    <img src="${p.img}">
     <div class="overlay"></div>
-
     <div class="content">
       <div class="cat">${p.cat}</div>
       <div class="name">${p.name}</div>
@@ -167,61 +169,45 @@ products.forEach((p,i)=>{
     </div>
   `;
 
-  section.addEventListener('click', ()=>{
-    ctaBtn.href =
-      `https://wa.me/${WHATS}?text=${encodeURIComponent(p.msg)}`;
+  slide.onclick = ()=>{
+    cta.href = `https://wa.me/${WHATS}?text=${encodeURIComponent(p.msg)}`;
+  };
 
-    // som seguro
-    audio.currentTime = 0;
-    audio.play().catch(()=>{});
-  });
+  wrap.appendChild(slide);
 
-  app.appendChild(section);
+  const d = document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  dots.appendChild(d);
 });
 
-/* CTA PADRÃO */
-ctaBtn.href = `https://wa.me/${WHATS}?text=Olá! Vim pelo site 🌸`;
+/* NAVEGAÇÃO */
+function update(){
+  wrap.style.transform = `translateX(-${current*100}vw)`;
 
-/* ANIMAÇÕES */
-function initAnimations(){
-
-  gsap.utils.toArray('.section').forEach(sec=>{
-
-    const img = sec.querySelector('.bg');
-    const content = sec.querySelector('.content');
-
-    /* PARALLAX */
-    if(img){
-      gsap.to(img,{
-        y:80,
-        ease:"none",
-        scrollTrigger:{
-          trigger:sec,
-          scrub:true
-        }
-      });
-    }
-
-    /* ENTRADA */
-    gsap.from(content,{
-      y:100,
-      opacity:0,
-      duration:1.2,
-      ease:"power3.out",
-      scrollTrigger:{
-        trigger:sec,
-        start:"top 75%"
-      }
-    });
-
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active',i===current);
   });
-
 }
 
-/* INIT SEGURO */
-window.addEventListener('load', ()=>{
-  initAnimations();
+/* SCROLL */
+window.addEventListener('wheel',(e)=>{
+  if(e.deltaY>0) current = Math.min(current+1,products.length-1);
+  else current = Math.max(current-1,0);
+  update();
 });
+
+/* TOUCH */
+let startX=0;
+window.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+window.addEventListener('touchend',e=>{
+  let dx = e.changedTouches[0].clientX - startX;
+  if(dx<-50) current = Math.min(current+1,products.length-1);
+  if(dx>50) current = Math.max(current-1,0);
+  update();
+});
+
+/* INIT */
+cta.href = `https://wa.me/${WHATS}?text=Olá! Vim pelo site 🌸`;
 </script>
 
 </body>
