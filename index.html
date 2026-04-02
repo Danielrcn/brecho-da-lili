@@ -2,551 +2,227 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Brechó da Lili — Moda feminina única em Goiânia.">
-<title>Brechó da Lili</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Jost:wght@100;200;300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Jost:wght@200;300&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden}
+html{
+  scroll-snap-type:y mandatory;
+}
+
 body{
+  margin:0;
+  background:#0b0706;
   font-family:'Jost',sans-serif;
-  background:#0e0a08;
-  color:#FAF6EF;
-  cursor:none;
+  color:#fff;
+  overflow-x:hidden;
 }
 
-/* ── CURSOR ── */
-#cur{position:fixed;z-index:9999;pointer-events:none;mix-blend-mode:difference}
-#cur-dot{width:8px;height:8px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
-#cur-ring{
-  position:fixed;z-index:9998;pointer-events:none;
-  width:44px;height:44px;border:1px solid rgba(201,169,110,.7);border-radius:50%;
-  transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .4s;
-}
-body.hovering #cur-ring{width:64px;height:64px;border-color:var(--accent)}
-
-/* ── LOADER ── */
-#loader{
-  position:fixed;inset:0;background:#0e0a08;z-index:8000;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;
-}
-#loader.out{animation:loaderOut .8s ease forwards}
-@keyframes loaderOut{to{opacity:0;visibility:hidden;pointer-events:none}}
-.ld-word{
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:clamp(3rem,10vw,8rem);color:#FAF6EF;letter-spacing:.1em;
-  overflow:hidden;display:block;
-}
-.ld-word span{display:inline-block;transform:translateY(100%);animation:slideUp .7s ease forwards}
-.ld-word span:nth-child(1){animation-delay:.1s}
-.ld-word span:nth-child(2){animation-delay:.2s}
-.ld-word span:nth-child(3){animation-delay:.3s}
-.ld-word span:nth-child(4){animation-delay:.4s}
-.ld-word span:nth-child(5){animation-delay:.5s}
-.ld-word span:nth-child(6){animation-delay:.6s}
-.ld-word span:nth-child(7){animation-delay:.7s}
-.ld-word span:nth-child(8){animation-delay:.75s}
-.ld-line{width:0;height:1px;background:linear-gradient(90deg,transparent,#C9A96E,transparent);animation:ldLine 1s .9s ease forwards}
-@keyframes ldLine{to{width:260px}}
-@keyframes slideUp{to{transform:translateY(0)}}
-
-/* ── HEADER ── */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:500;
-  padding:2rem 3rem;
-  display:flex;align-items:center;justify-content:space-between;
-  mix-blend-mode:normal;
-}
-.logo{
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:1.5rem;color:#FAF6EF;letter-spacing:.06em;text-decoration:none;
-  opacity:0;animation:fadeIn .6s 2s ease forwards;
-}
-.header-right{
-  display:flex;align-items:center;gap:2.5rem;
-  opacity:0;animation:fadeIn .6s 2.1s ease forwards;
-}
-.hlink{
-  font-weight:200;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;
-  color:rgba(250,246,239,.5);text-decoration:none;transition:color .3s;
-}
-.hlink:hover{color:#C9A96E}
-.hbtn{
-  border:1px solid rgba(201,169,110,.4);color:#C9A96E;background:none;
-  padding:.5rem 1.6rem;
-  font-family:'Jost',sans-serif;font-weight:200;font-size:.68rem;
-  letter-spacing:.25em;text-transform:uppercase;cursor:none;
-  text-decoration:none;transition:all .3s;display:inline-block;
-}
-.hbtn:hover{background:#C9A96E;color:#0e0a08;border-color:#C9A96E}
-@keyframes fadeIn{to{opacity:1}}
-
-/* ── MAIN STAGE ── */
-#stage{
-  position:fixed;inset:0;
-  display:grid;grid-template-columns:1fr 1fr;
-}
-
-/* LEFT — PRODUCT VISUAL */
-.stage-visual{
-  position:relative;overflow:hidden;background:#0e0a08;
-}
-.visual-bg{
-  position:absolute;inset:0;
-  transition:background 1s ease, opacity .5s ease;
-}
-.visual-emoji{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:clamp(8rem,18vw,22rem);
-  filter:drop-shadow(0 0 80px var(--accent));
-  transition:transform .8s cubic-bezier(.16,1,.3,1), filter 1s ease;
-  transform:scale(1) translateY(0);
-  animation:breathe 5s ease-in-out infinite;
-}
-@keyframes breathe{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.04) translateY(-12px)}}
-.visual-number{
-  position:absolute;bottom:3rem;left:3rem;
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:clamp(6rem,14vw,16rem);color:rgba(255,255,255,.04);
-  line-height:1;user-select:none;pointer-events:none;
-}
-.visual-line{
-  position:absolute;top:0;right:0;width:1px;height:100%;
-  background:linear-gradient(to bottom,transparent 0%,rgba(201,169,110,.3) 30%,rgba(201,169,110,.3) 70%,transparent 100%);
-}
-.visual-dots{
-  position:absolute;bottom:3rem;right:3rem;
-  display:flex;flex-direction:column;gap:.5rem;
-}
-.vdot{
-  width:6px;height:6px;border-radius:50%;
-  background:rgba(201,169,110,.25);transition:all .4s;cursor:none;
-}
-.vdot.active{background:#C9A96E;transform:scale(1.5)}
-
-/* RIGHT — PRODUCT INFO */
-.stage-info{
+/* SEÇÃO */
+.section{
+  height:100vh;
+  scroll-snap-align:start;
   position:relative;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:8rem 5rem 5rem 5rem;
   overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  padding:2rem;
 }
-.info-bg-text{
+
+/* IMAGEM */
+.bg{
   position:absolute;
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;
-  font-size:clamp(6rem,14vw,18rem);color:rgba(255,255,255,.025);
-  line-height:1;right:-1rem;bottom:-1rem;
-  pointer-events:none;user-select:none;white-space:nowrap;
-  transition:opacity .5s;
-}
-.info-wrap{position:relative;z-index:1}
-.info-cat{
-  font-weight:100;font-size:.6rem;letter-spacing:.6em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:1.8rem;
-  display:flex;align-items:center;gap:1rem;
-  opacity:0;transform:translateX(-20px);
-  transition:opacity .6s .1s ease, transform .6s .1s ease;
-}
-.info-cat.show{opacity:1;transform:translateX(0)}
-.info-cat::before{content:'';width:30px;height:1px;background:var(--accent)}
-.info-name{
-  font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(2.2rem,4.5vw,5rem);line-height:1.05;
-  color:#FAF6EF;margin-bottom:2rem;
-  opacity:0;transform:translateY(30px);
-  transition:opacity .7s .2s ease, transform .7s .2s ease;
-}
-.info-name em{font-style:italic;color:var(--accent)}
-.info-name.show{opacity:1;transform:translateY(0)}
-.info-divider{
-  width:40px;height:1px;background:rgba(201,169,110,.35);margin-bottom:2rem;
-  opacity:0;transform:scaleX(0);transform-origin:left;
-  transition:opacity .5s .35s, transform .5s .35s;
-}
-.info-divider.show{opacity:1;transform:scaleX(1)}
-.info-meta{
-  display:flex;align-items:baseline;gap:1.5rem;margin-bottom:2.5rem;
-  opacity:0;transform:translateY(20px);
-  transition:opacity .6s .4s ease, transform .6s .4s ease;
-}
-.info-meta.show{opacity:1;transform:translateY(0)}
-.price-new{
-  font-family:'Cormorant Garamond',serif;font-weight:600;
-  font-size:clamp(2rem,4vw,3.5rem);color:var(--accent);
-}
-.price-old{
-  font-size:.85rem;font-weight:200;
-  color:rgba(250,246,239,.3);text-decoration:line-through;
-}
-.info-sizes{
-  display:flex;gap:.6rem;margin-bottom:3rem;
-  opacity:0;transform:translateY(20px);
-  transition:opacity .6s .5s ease, transform .6s .5s ease;
-}
-.info-sizes.show{opacity:1;transform:translateY(0)}
-.sz-btn{
-  width:42px;height:42px;border:1px solid rgba(250,246,239,.15);
-  background:none;color:rgba(250,246,239,.5);cursor:none;
-  font-family:'Jost',sans-serif;font-weight:200;font-size:.75rem;
-  letter-spacing:.1em;text-transform:uppercase;
-  transition:all .3s;display:flex;align-items:center;justify-content:center;
-}
-.sz-btn:hover,.sz-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(201,169,110,.08)}
-.info-cta{
-  opacity:0;transform:translateY(20px);
-  transition:opacity .6s .6s ease, transform .6s .6s ease;
-}
-.info-cta.show{opacity:1;transform:translateY(0)}
-.btn-interesse{
-  display:inline-flex;align-items:center;gap:1rem;
-  background:var(--accent);color:#0e0a08;
-  padding:1rem 2.8rem;border:none;cursor:none;
-  font-family:'Jost',sans-serif;font-weight:300;
-  font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
-  text-decoration:none;transition:all .4s;position:relative;overflow:hidden;
-}
-.btn-interesse::before{
-  content:'';position:absolute;inset:0;
-  background:#FAF6EF;transform:translateX(-100%);transition:transform .4s ease;
-}
-.btn-interesse:hover::before{transform:translateX(0)}
-.btn-interesse span{position:relative;z-index:1}
-.btn-ghost-sm{
-  display:inline-flex;align-items:center;gap:.6rem;margin-left:1.5rem;
-  background:none;border:none;color:rgba(250,246,239,.35);cursor:none;
-  font-family:'Jost',sans-serif;font-weight:200;font-size:.68rem;
-  letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
-  transition:color .3s;
-}
-.btn-ghost-sm:hover{color:rgba(250,246,239,.7)}
-
-/* ── NAV ARROWS ── */
-.nav-arrows{
-  position:fixed;bottom:3rem;left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:1rem;z-index:400;
-  opacity:0;animation:fadeIn .6s 2.3s ease forwards;
-}
-.arrow-btn{
-  width:50px;height:50px;border:1px solid rgba(250,246,239,.12);
-  background:none;cursor:none;color:rgba(250,246,239,.4);
-  font-size:1rem;transition:all .3s;
-  display:flex;align-items:center;justify-content:center;
-}
-.arrow-btn:hover{border-color:rgba(201,169,110,.5);color:#C9A96E;background:rgba(201,169,110,.05)}
-.nav-counter{
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:1.1rem;color:rgba(250,246,239,.3);min-width:60px;text-align:center;
-  letter-spacing:.1em;
-}
-.nav-counter strong{color:rgba(250,246,239,.7);font-weight:300}
-
-/* ── PROGRESS BAR ── */
-.progress-bar{
-  position:fixed;bottom:0;left:0;height:2px;
-  background:linear-gradient(90deg,var(--accent),#E8768E);
-  transition:width .5s ease;z-index:400;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transform:scale(1.1);
+  will-change:transform;
 }
 
-/* ── SWIPE HINT ── */
-.swipe-hint{
-  position:fixed;bottom:7rem;left:50%;transform:translateX(-50%);
-  font-weight:100;font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;
-  color:rgba(250,246,239,.2);display:none;
+/* OVERLAY */
+.overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
 }
 
-/* ── ACCENT COLORS per product ── */
-:root{--accent:#C9A96E}
+/* TEXTO */
+.content{
+  position:relative;
+  z-index:2;
+}
 
-/* ── MOBILE ── */
+.cat{
+  font-size:.7rem;
+  letter-spacing:.4em;
+  color:var(--accent);
+}
+
+.name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.2rem;
+  line-height:1.1;
+}
+
+.price{
+  margin-top:.5rem;
+  font-size:1.3rem;
+  color:var(--accent);
+}
+
+/* CTA */
+.cta{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  padding:1rem;
+  background:linear-gradient(to top,#0b0706,transparent);
+}
+
+.cta a{
+  display:block;
+  text-align:center;
+  padding:1rem;
+  background:var(--accent);
+  color:#000;
+  text-decoration:none;
+  letter-spacing:.2em;
+}
+
+/* MOBILE */
 @media(max-width:768px){
-  html,body{overflow:hidden}
-  #stage{grid-template-columns:1fr;grid-template-rows:55vh 1fr}
-  .stage-info{padding:2rem 2rem 7rem;justify-content:flex-start}
-  .info-name{font-size:clamp(1.8rem,7vw,3rem)}
-  .price-new{font-size:clamp(1.6rem,6vw,2.5rem)}
-  header{padding:1.5rem}
-  .hlink{display:none}
-  .nav-arrows{bottom:1.5rem}
-  .swipe-hint{display:block}
+  .name{font-size:1.8rem}
+  .price{font-size:1.1rem}
 }
 </style>
 </head>
+
 <body>
 
-<div id="cur"><div id="cur-dot"></div></div>
-<div id="cur-ring"></div>
+<div id="app"></div>
 
-<!-- LOADER -->
-<div id="loader">
-  <span class="ld-word">
-    <span>B</span><span>r</span><span>e</span><span>c</span><span>h</span><span>ó</span>
-  </span>
-  <span class="ld-word" style="font-size:clamp(2rem,7vw,5rem);letter-spacing:.3em;animation-delay:.3s">
-    <span style="animation-delay:.5s">d</span><span style="animation-delay:.6s">a</span>
-    &nbsp;
-    <span style="animation-delay:.7s">L</span><span style="animation-delay:.8s">i</span><span style="animation-delay:.9s">l</span><span style="animation-delay:1s">i</span>
-  </span>
-  <div class="ld-line"></div>
+<div class="cta">
+  <a id="ctaBtn" target="_blank">Tenho interesse</a>
 </div>
 
-<!-- HEADER -->
-<header>
-  <a class="logo" href="#">Brechó da Lili</a>
-  <div class="header-right">
-    <a class="hlink" href="https://wa.me/5562999999999" target="_blank">WhatsApp</a>
-    <a class="hlink" href="https://wa.me/5562999999999?text=Quero%20ver%20mais%20peças%20🌸" target="_blank">Ver todas as peças</a>
-    <a class="hbtn" href="https://wa.me/5562999999999?text=Olá%20Lili!%20Vim%20pelo%20site%20🌸" target="_blank">Falar agora</a>
-  </div>
-</header>
-
-<!-- MAIN STAGE -->
-<div id="stage">
-  <!-- VISUAL -->
-  <div class="stage-visual" id="stage-visual">
-    <div class="visual-bg" id="vbg"></div>
-    <div class="visual-emoji" id="vemoji"></div>
-    <div class="visual-number" id="vnum"></div>
-    <div class="visual-line"></div>
-    <div class="visual-dots" id="vdots"></div>
-  </div>
-
-  <!-- INFO -->
-  <div class="stage-info" id="stage-info">
-    <div class="info-bg-text" id="ibg"></div>
-    <div class="info-wrap">
-      <div class="info-cat" id="icat"></div>
-      <h2 class="info-name" id="iname"></h2>
-      <div class="info-divider" id="idiv"></div>
-      <div class="info-meta" id="imeta"></div>
-      <div class="info-sizes" id="isizes"></div>
-      <div class="info-cta" id="icta"></div>
-    </div>
-  </div>
-</div>
-
-<!-- NAV -->
-<div class="nav-arrows">
-  <button class="arrow-btn" id="btn-prev" onclick="navigate(-1)">←</button>
-  <div class="nav-counter"><strong id="nc-cur">1</strong> / <span id="nc-tot"></span></div>
-  <button class="arrow-btn" id="btn-next" onclick="navigate(1)">→</button>
-</div>
-
-<div class="progress-bar" id="pbar"></div>
-<div class="swipe-hint">Deslize para navegar</div>
+<audio id="tick" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
 <script>
+gsap.registerPlugin(ScrollTrigger);
+
 const WHATS = '5562999999999';
 
+/* PRODUTOS */
 const products = [
   {
     cat:'Vestido',
-    name:'Floral\nManga Curta',
-    emoji:'👗',
+    name:'Floral Elegance',
     price:'35',
-    oldPrice:'89',
-    sizes:['P','M','G'],
-    bg:'radial-gradient(ellipse at 40% 60%, #3d1a2a 0%, #0e0a08 70%)',
     accent:'#D4879A',
-    msg:'Tenho interesse no *Vestido Floral Manga Curta* por R$35. Ainda disponível? 🌸'
+    img:'https://images.unsplash.com/photo-1520975922324-2c1b3a4c8d2b?w=1200',
+    msg:'Tenho interesse no Vestido Floral Elegance 🌸'
   },
   {
     cat:'Blusa',
-    name:'Tricô\nRosê',
-    emoji:'👚',
+    name:'Tricô Rosé',
     price:'22',
-    oldPrice:'60',
-    sizes:['P','M'],
-    bg:'radial-gradient(ellipse at 60% 40%, #2d1f10 0%, #0e0a08 70%)',
     accent:'#C9A96E',
-    msg:'Tenho interesse na *Blusa Tricô Rosê* por R$22. Ainda disponível? 🌸'
+    img:'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=1200',
+    msg:'Tenho interesse na Blusa Tricô Rosé 🌸'
   },
   {
     cat:'Calça',
-    name:'Pantalona\nVerde Sage',
-    emoji:'👖',
+    name:'Pantalona Sage',
     price:'45',
-    oldPrice:'110',
-    sizes:['M','G'],
-    bg:'radial-gradient(ellipse at 30% 70%, #0f2016 0%, #0e0a08 70%)',
     accent:'#8FAF8A',
-    msg:'Tenho interesse na *Calça Pantalona Verde Sage* por R$45. Ainda disponível? 🌸'
-  },
-  {
-    cat:'Saia',
-    name:'Midi\nEstampada',
-    emoji:'🩱',
-    price:'28',
-    oldPrice:'75',
-    sizes:['P','M'],
-    bg:'radial-gradient(ellipse at 50% 50%, #1e1030 0%, #0e0a08 70%)',
-    accent:'#A78BCA',
-    msg:'Tenho interesse na *Saia Midi Estampada* por R$28. Ainda disponível? 🌸'
-  },
-  {
-    cat:'Conjunto',
-    name:'Linho\nBege',
-    emoji:'🎽',
-    price:'55',
-    oldPrice:'140',
-    sizes:['G','GG'],
-    bg:'radial-gradient(ellipse at 60% 60%, #251810 0%, #0e0a08 70%)',
-    accent:'#D4A574',
-    msg:'Tenho interesse no *Conjunto Linho Bege* por R$55. Ainda disponível? 🌸'
-  },
-  {
-    cat:'Camisa',
-    name:'Social\nListrada',
-    emoji:'👔',
-    price:'30',
-    oldPrice:'79',
-    sizes:['M','G'],
-    bg:'radial-gradient(ellipse at 40% 40%, #0f1a28 0%, #0e0a08 70%)',
-    accent:'#7AAED4',
-    msg:'Tenho interesse na *Camisa Social Listrada* por R$30. Ainda disponível? 🌸'
+    img:'https://images.unsplash.com/photo-1521334884684-d80222895322?w=1200',
+    msg:'Tenho interesse na Pantalona Sage 🌸'
   }
 ];
 
-let current = 0;
-let animating = false;
+const app = document.getElementById('app');
+const ctaBtn = document.getElementById('ctaBtn');
+const audio = document.getElementById('tick');
 
-// dots
-const dotsEl = document.getElementById('vdots');
-products.forEach((_,i)=>{
-  const d = document.createElement('div');
-  d.className='vdot'+(i===0?' active':'');
-  d.onclick=()=>goTo(i);
-  dotsEl.appendChild(d);
-});
-document.getElementById('nc-tot').textContent = products.length;
+/* RENDER IMEDIATO (SEM BLOQUEIO) */
+products.forEach((p,i)=>{
+  const section = document.createElement('div');
+  section.className='section';
+  section.style.setProperty('--accent',p.accent);
 
-function setAccent(color){
-  document.documentElement.style.setProperty('--accent',color);
-}
+  section.innerHTML = `
+    <img class="bg" src="${p.img}" loading="${i===0?'eager':'lazy'}"
+      onerror="this.style.background='#000';this.remove();">
+    <div class="overlay"></div>
 
-function animate(idx){
-  if(animating)return;
-  animating=true;
+    <div class="content">
+      <div class="cat">${p.cat}</div>
+      <div class="name">${p.name}</div>
+      <div class="price">R$ ${p.price}</div>
+    </div>
+  `;
 
-  const p = products[idx];
-  setAccent(p.accent);
+  section.addEventListener('click', ()=>{
+    ctaBtn.href =
+      `https://wa.me/${WHATS}?text=${encodeURIComponent(p.msg)}`;
 
-  // visual
-  document.getElementById('vbg').style.background = p.bg;
-  const em = document.getElementById('vemoji');
-  em.style.filter = `drop-shadow(0 0 80px ${p.accent})`;
-  em.textContent = p.emoji;
-  document.getElementById('vnum').textContent = String(idx+1).padStart(2,'0');
-  document.getElementById('ibg').textContent = p.cat;
-
-  // dots
-  document.querySelectorAll('.vdot').forEach((d,i)=>d.classList.toggle('active',i===idx));
-
-  // counter
-  document.getElementById('nc-cur').textContent = idx+1;
-
-  // progress bar
-  document.getElementById('pbar').style.width = ((idx+1)/products.length*100)+'%';
-
-  // reset info fields
-  const fields = ['icat','iname','idiv','imeta','isizes','icta'];
-  fields.forEach(id=>{
-    const el=document.getElementById(id);
-    el.classList.remove('show');
+    // som seguro
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
   });
 
-  // cat
-  const icat = document.getElementById('icat');
-  icat.textContent = p.cat;
-
-  // name — split lines
-  const iname = document.getElementById('iname');
-  const lines = p.name.split('\n');
-  iname.innerHTML = lines.map((l,i)=>i===0?l:`<em>${l}</em>`).join('<br>');
-
-  // meta
-  document.getElementById('imeta').innerHTML =
-    `<span class="price-new">R$ ${p.price}</span><span class="price-old">R$ ${p.oldPrice}</span>`;
-
-  // sizes
-  const isizes = document.getElementById('isizes');
-  isizes.innerHTML = p.sizes.map((s,i)=>
-    `<button class="sz-btn${i===0?' active':''}" onclick="this.parentNode.querySelectorAll('.sz-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${s}</button>`
-  ).join('');
-
-  // cta
-  const link = `https://wa.me/${WHATS}?text=${encodeURIComponent(p.msg)}`;
-  document.getElementById('icta').innerHTML =
-    `<a class="btn-interesse" href="${link}" target="_blank"><span>Tenho interesse →</span></a>
-     <a class="btn-ghost-sm" href="https://wa.me/${WHATS}?text=${encodeURIComponent('Olá Lili! Vim pelo site 🌸')}" target="_blank">Falar com a Lili</a>`;
-
-  // stagger show
-  setTimeout(()=>{ fields.forEach((id,i)=>setTimeout(()=>document.getElementById(id).classList.add('show'),i*80)); },80);
-
-  setTimeout(()=>{animating=false},700);
-}
-
-function navigate(dir){
-  current = (current+dir+products.length)%products.length;
-  animate(current);
-}
-
-function goTo(idx){
-  current=idx;
-  animate(current);
-}
-
-// keyboard
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown') navigate(1);
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp') navigate(-1);
+  app.appendChild(section);
 });
 
-// touch swipe
-let tx=0,ty=0;
-document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
-document.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tx;
-  const dy=e.changedTouches[0].clientY-ty;
-  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40) navigate(dx<0?1:-1);
-  else if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>40) navigate(dy<0?1:-1);
-},{passive:true});
+/* CTA PADRÃO */
+ctaBtn.href = `https://wa.me/${WHATS}?text=Olá! Vim pelo site 🌸`;
 
-// wheel
-let wt=0;
-document.addEventListener('wheel',e=>{
-  const now=Date.now();
-  if(now-wt<700)return;
-  wt=now;
-  navigate(e.deltaY>0?1:-1);
-},{passive:true});
+/* ANIMAÇÕES */
+function initAnimations(){
 
-// cursor
-const curDot=document.getElementById('cur-dot');
-const curRing=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  curDot.style.left=mx+'px';curDot.style.top=my+'px';
-});
-(function animCur(){
-  rx+=(mx-rx)*.15;ry+=(my-ry)*.15;
-  curRing.style.left=rx+'px';curRing.style.top=ry+'px';
-  requestAnimationFrame(animCur);
-})();
-document.querySelectorAll('a,button,.vdot').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
-});
+  gsap.utils.toArray('.section').forEach(sec=>{
 
-// loader out
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    document.getElementById('loader').classList.add('out');
-    animate(0);
-  },2000);
+    const img = sec.querySelector('.bg');
+    const content = sec.querySelector('.content');
+
+    /* PARALLAX */
+    if(img){
+      gsap.to(img,{
+        y:80,
+        ease:"none",
+        scrollTrigger:{
+          trigger:sec,
+          scrub:true
+        }
+      });
+    }
+
+    /* ENTRADA */
+    gsap.from(content,{
+      y:100,
+      opacity:0,
+      duration:1.2,
+      ease:"power3.out",
+      scrollTrigger:{
+        trigger:sec,
+        start:"top 75%"
+      }
+    });
+
+  });
+
+}
+
+/* INIT SEGURO */
+window.addEventListener('load', ()=>{
+  initAnimations();
 });
 </script>
+
 </body>
 </html>
